@@ -11,6 +11,7 @@ create table monsterDef (
 	reqhealth int,
 	reqstamina int,
 	reqmana int,
+	reqspeed int,
 	reqstrength int,
 	reqdexterity int,
 	reqfocus int,
