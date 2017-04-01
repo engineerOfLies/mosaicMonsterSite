@@ -12,17 +12,15 @@ var scene = game.getScene();
 // do all setup here
 
 game.addEntity("starfield",starfield_new(scene),starfield_update,starfield_draw);
-/*var crystal = game.addEntity(
+var crystal = game.addEntity(
 		"crystal",
-		actor_new(scene,new THREE.Vector3(0,0,0),	//position
-			new THREE.Vector3(0,0,0),			//rotation
-			new THREE.Vector3(1,1,1),	 	//scale
-			'models/crystal/crystal.json',//model
-			undefined,							//custom update
-			"idle"),							//action
+		actor_new(scene,'models/crystal/crystal.json'),
 		actor_update,
 		actor_draw);
-*/
+crystal.setScale(3,3,3);
+crystal.setColor(0.5,1,0.5);
+crystal.setRotVector(0,0.01,0);
+
 game.begin();
 
 </script>

@@ -8,6 +8,7 @@ class Entity
 		this.update = update;
 		this.draw = draw;
 		this.dirty = 1;
+		this.color = new THREE.Color(1,1,1);
 		this.scale = new THREE.Vector3(1,1,1);
 		this.position = new THREE.Vector3()
 		this.old_position = new THREE.Vector3()
@@ -20,15 +21,42 @@ class Entity
 
 	postUpdate()
 	{
-		this.old_position = this.position;
-		this.old_rotation = this.rotation;
+		this.old_position.copy(this.position);
+		this.old_rotation.copy(this.rotation);
 		this.position.add(this.velocity);
 		this.velocity.add(this.acceleration);
 		this.rotation.add(this.rotvector);
-		if ((this.old_position != this.position) || (this.old_rotation != this.rotation))
+		if ((!this.old_position.equals(this.position)) || (!this.old_rotation.equals(this.rotation)))
 		{
 			this.dirty = 1;
 		}
+	}
+
+	preDraw()
+	{
+		if (this.data.geometry === undefined)return;
+		if (this.dirty == 1)
+		{
+			this.dirty = 0;
+			this.data.geometry.position.copy(this.position);
+			this.data.geometry.rotateX(this.rotvector.x);
+			this.data.geometry.rotateY(this.rotvector.y);
+			this.data.geometry.rotateZ(this.rotvector.z);
+			this.data.geometry.scale.copy(this.scale);
+			if (this.data.material !== undefined)
+			{
+				this.data.material.color.copy(this.color);
+			}
+			this.data.geometry.updateMatrix();
+		}
+	}
+
+	setColor(r,g,b)
+	{
+		this.color.r = r;
+		this.color.g = g;
+		this.color.b = b;
+		this.dirty = 1;
 	}
 
 	setPosition(x,y,z)
@@ -104,6 +132,7 @@ class EntityList
 		l = this.list.length;
 		for (i = 0; i < l;i++)
 		{
+			this.list[i].preDraw();
 			if (this.list[i].draw != undefined)
 			{
 				this.list[i].draw(this.list[i]);
@@ -129,7 +158,7 @@ class EntityList
 			{
 				this.list[i].update(this.list[i]);
 			}
-			this.list[i].postUpdate(this.list[i]);
+			this.list[i].postUpdate();
 		}
 	}
 }

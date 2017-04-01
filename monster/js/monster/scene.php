@@ -38,9 +38,17 @@ class GameSystem
 		container.appendChild( this.renderer.domElement );
 		// lights
 		this.scene.add( new THREE.AmbientLight( 0xcccccc ) );
-		this.pointLight = new THREE.PointLight( 0xff4400, 5, 30 );
-		this.pointLight.position.set( 5, 0, 0 );
-		this.scene.add( this.pointLight );
+		var pointLight = new THREE.PointLight( 0x4444cc, 2, 30 );
+		pointLight.position.set( 5, 5, 5 );
+		this.scene.add( pointLight );
+
+		pointLight = new THREE.PointLight( 0xcc4444, 2, 30 );
+		pointLight.position.set( -5, 7, 7 );
+		this.scene.add( pointLight );
+
+		pointLight = new THREE.PointLight( 0x44cc44, 2, 30 );
+		pointLight.position.set( 0, -7, 7 );
+		this.scene.add( pointLight );
 		//
 		window.addEventListener( 'resize', function(){this.onWindowResize();}.bind(this), false );
 	}
@@ -71,8 +79,8 @@ class GameSystem
 
 	addEntity(name,entity,updateFunc,drawFunc)
 	{
-		this.entityList.spawn(name,entity,updateFunc,drawFunc);
-		return entity;// so the new entity function can be called right within the same call line
+		var ent = this.entityList.spawn(name,entity,updateFunc,drawFunc);
+		return ent;// so the new entity function can be called right within the same call line
 	}
 }
 </script>

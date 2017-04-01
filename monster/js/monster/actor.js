@@ -7,14 +7,6 @@ function actor_update(entity)
 
 function actor_draw(entity)
 {
-	if (entity.dirty == 1)
-	{
-		entity.dirty = 0;
-		entity.data.geometry.position = entity.data.position;
-		entity.data.geometry.rotation = entity.data.scale;
-		entity.data.geometry.scale = entity.data.scale;
-		entity.data.geometry.updateMatrix();
-	}
 }
 
 function actor_new(scene,model)
@@ -26,7 +18,7 @@ function actor_new(scene,model)
 			// adjust color a bit
 			var material = materials[ 0 ];
 			material.morphTargets = true;
-			material.color.setHex( 0xffaaaa );
+			material.color.setHex( 0xffffff );
 			var faceMaterial = new THREE.MultiMaterial( materials );
 			// leave space for big monster
 			mesh = new THREE.Mesh( geometry, faceMaterial );
@@ -43,10 +35,11 @@ function actor_new(scene,model)
 					.startAt( - Math.random() )	// random phase (already running)
 					.play();					// let's go
 			}
-	} );
+			data.geometry = mesh;
+			data.material = material;
+	}.bind(this) );
 
 	var data = {
-		geometry : mesh,
 		clock : new THREE.Clock(true),
 		mixer : mixer
 	};
