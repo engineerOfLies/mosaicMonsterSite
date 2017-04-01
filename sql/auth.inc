@@ -1,9 +1,33 @@
 <?php
+
+require_once("err.inc");
+/**
+	@brief used for web php to validate a session information from a request
+	@param session Mixed, expected to have name and id of the session to validate
+*/
+function validateSession($session)
+{
+	$session = json_decode($session);
+	if (!isset($session))
+	{
+		err("no session information provided");	
+	}
+	$auth = new AuthDB();
+	$sessionId = $session->id;
+	$name = $session->name;
+	$valid = $auth->validateSession($name,$sessionId);
+	if ($valid["status"] != "success")
+	{
+		err($valid["status"]);
+	}
+	return "ok";
+}
+
 class AuthDB
 {
 	private $db;
 
-	public function __construct($confFile = "/var/www/ini/dbaccess.ini")
+	public function __construct($confFile = "/var/www/monsterini/monsterdb.ini")
 	{
 		$conf = parse_ini_file($confFile,false);
 		$this->db = new mysqli("localhost",$conf["username"],$conf["password"],$conf["db"]);
@@ -24,6 +48,11 @@ class AuthDB
 		return hash("sha256",$this->salt.$password);
 	}
 
+	public function register($username,$password,$email)
+	{
+		return $this->registerUser($username,$password,"p",$email);
+	}
+
 	public function registerUser($username,$password,$role,$email)
 	{
 		$un = $this->db->real_escape_string($username);
@@ -32,17 +61,9 @@ class AuthDB
 		$em = $this->db->real_escape_string($email);
 		switch($r)
 		{
-			case "patient":
+			case "player":
 			case "p":
 				$ur = "p";
-				break;
-			case "therapist":
-			case "t":
-				$ur = "t";
-				break;
-			case "scientist":
-			case "doctor":
-				$ur = "s";
 				break;
 			case "administrator":
 			case "admin":
@@ -148,7 +169,7 @@ class AuthDB
 			$result = $this->db->query($update);
 			if ($this->db->affected_rows != 1)
 			{
-				echo "error: failed to insert row with query:".PHP_EOL;
+				echo "error: failed to insert session row with query:".PHP_EOL;
 				echo $query.PHP_EOL;
 				return array(
 						"status"=>"fail",

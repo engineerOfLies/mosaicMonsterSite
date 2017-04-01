@@ -6,8 +6,7 @@ function starfield_draw(entity)
 function starfield_update(entity)
 {
 	var time = Date.now() * 0.005;
-	var geometry = entity.data;
-	var attributes = geometry.attributes;
+	var attributes = entity.data.mesh.geometry.attributes;
 	for ( var i = 0; i < attributes.size.array.length; i++ ) {
 		attributes.size.array[ i ] = 14 + 13 * Math.sin( 0.1 * i + time );
 	}
@@ -37,8 +36,8 @@ function starfield_new(scene)
 			}
 	`;
 
-	var amount = 100000;
-	var radius = 2000;
+	var amount = 15000;
+	var radius = 1000;
 	var positions = new Float32Array( amount * 3 );
 	var colors = new Float32Array( amount * 3 );
 	var sizes = new Float32Array( amount );
@@ -77,6 +76,10 @@ function starfield_new(scene)
 	//
 	sphere = new THREE.Points( geometry, material );
 	scene.add(sphere);
-	return sphere;
+	var data = {
+		mesh:sphere,
+		speed:1.0
+	};
+	return data;
 }
 

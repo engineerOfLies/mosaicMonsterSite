@@ -15,7 +15,6 @@
 <script src="../build/three.js"></script>
 
 		<script src="js/Detector.js"></script>
-		<script src="js/libs/stats.min.js"></script>
 
 		<script type="x-shader/x-vertex" id="vertexshader">
 			uniform float amplitude;
@@ -43,7 +42,7 @@
 
 		<script>
 		if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-		var renderer, scene, camera, stats;
+		var renderer, scene, camera;
 		var sphere;
 		var noise = [];
 		var WIDTH = window.innerWidth;
@@ -100,8 +99,6 @@
 			renderer.setSize( WIDTH, HEIGHT );
 			var container = document.getElementById( 'container' );
 			container.appendChild( renderer.domElement );
-			stats = new Stats();
-			container.appendChild( stats.dom );
 			//
 			window.addEventListener( 'resize', onWindowResize, false );
 		}
@@ -113,7 +110,6 @@
 		function animate() {
 			requestAnimationFrame( animate );
 			render();
-			stats.update();
 		}
 		function render() {
 			var time = Date.now() * 0.005;
