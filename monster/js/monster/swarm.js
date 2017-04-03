@@ -1,40 +1,25 @@
 function swarm_update(entity)
 {
-	var tick = entity.data.tick;
-	switch (entity.data.action)
-	{
-		case "wobble":
-			entity.data.offset.x = Math.sin(tick * 1.5) * 5;
-			entity.data.offset.y = Math.sin(tick * 1.33) * 5;
-			entity.data.offset.z = Math.sin(tick * 2.83) * 5;
-			entity.data.step --;
-			if (entity.data.step <= 0)
-			{
-				entity.data.action.step = 100;
-				entity.data.action.name = "return";
-			}
-		break;
-		case "return":
-			entity.data.offset.x *= 0.75;
-			entity.data.offset.y *= 0.75;
-			entity.data.offset.z *= 0.75;
-			entity.data.step --;
-			if (entity.data.step <= 0)
-			{
-				entity.data.action.step = 1000;
-				entity.data.action.name = "none";
-			}
-		break;
-		case "none":
-			entity.data.step --;
-			if (entity.data.action.step <= 0)
-			{
-				entity.data.action.step = 1000;
-				entity.data.action.name = "wobble";
-			}
-		break;
-	}
 }
+
+function swarm_set_direction(entity,x,y,z,speed)
+{
+	entity.data.direction.x = x;
+	entity.data.direction.y = y;
+	entity.data.direction.z = z;
+	entity.data.speed = speed;
+}
+
+function swarm_set_color_variance(entity,variance)
+{
+	entity.data.color_variance = variance;
+}
+function swarm_set_velocity_variance(entity,variance)
+{
+	if (!entity)return;
+	entity.data.variance = variance;
+}
+
 
 function swarm_draw(entity)
 {
@@ -44,42 +29,62 @@ function swarm_draw(entity)
 	entity.data.tick += delta;
 	var tick = entity.data.tick;
 	var color = new THREE.Color( 0xffffff );
+	var hsl = entity.color.getHSL(hsl);
 	if (tick < 0) tick = 0;
+	options.color = entity.color.getHex();
 	if (delta > 0) {
-		color.setHSL( 0.6 + 0.3 * Math.sin(tick), 0.7, 0.5 );
-		options.color = color.getHex();
-		options.position.x = entity.data.position.x + entity.data.offset.x;
-		options.position.y = entity.data.position.y + entity.data.offset.y;
-		options.position.z = entity.data.position.z + entity.data.offset.z;
-		for (var x = 0; x < 150000 * delta; x++) {
+		if (entity.data.color_variance)
+		{
+			color.setHSL( hsl.h + (entity.data.color_variance * Math.sin(tick)), hsl.s, hsl.l );
+			options.color = color.getHex();
+		}
+		options.velocity.copy(entity.data.direction);
+		options.position.x = entity.position.x + entity.data.offset.x;
+		options.position.y = entity.position.y + entity.data.offset.y;
+		options.position.z = entity.position.z + entity.data.offset.z;
+		options.position.multiplyScalar(0.001);
+		for (var x = 0; x < entity.data.spawn_rate * delta; x++) {
+			options.velocity.x = entity.data.direction.x + ((Math.random() * 2.0 - 1.0) * entity.data.variance);
+			options.velocity.y = entity.data.direction.y + ((Math.random() * 2.0 - 1.0) * entity.data.variance);
+			options.velocity.z = entity.data.direction.z + ((Math.random() * 2.0 - 1.0) * entity.data.variance);
+			options.velocity.normalize();
+			options.velocity.multiplyScalar(entity.data.speed);
+			options.velocity.x *= entity.scale.x;
+			options.velocity.y *= entity.scale.y;
+			options.velocity.z *= entity.scale.z;
 			particleSystem.spawnParticle(options);
 		}
 	}
 	particleSystem.update(tick);
 }
 
-function swarm_new(scene)
+function swarm_new(scene,maxcount = 100000)
 {
 	var particleSystem;
 	particleSystem = new THREE.GPUParticleSystem({
-					maxParticles: 250000
+					maxParticles: maxcount
 			});
 	var options = {
 		  position: new THREE.Vector3(),
-		  positionRandomness: .7,
+		  positionRandomness: 0,
 		  velocity: new THREE.Vector3(),
-		  velocityRandomness: .3,
-		  color: 0xaa88ff,
-		  colorRandomness: .2,
-		  turbulence: .2,
+		  velocityRandomness: 0,
+		  color: 0xcccccc,
+		  colorRandomness: 0,
+		  turbulence: 0,
 		  lifetime: 1,
-		  size: 5,
+		  size: 10,
 		  sizeRandomness: 1
 	};
 	var data = {
 		geometry: particleSystem,
+		direction: new THREE.Vector3(),
+		variance: 0,
+		speed : 1,
 		clock : new THREE.Clock(true),
 		tick : 0,
+		spawn_rate: 15000,
+		color_variance: 0,
 		options : options,
 		offset: new THREE.Vector3(),
 		action : {

@@ -8,7 +8,10 @@ class Entity
 		this.update = update;
 		this.draw = draw;
 		this.dirty = 1;
+		this.highlit = 0;
+		this.reflectivity = 1.0;
 		this.color = new THREE.Color(1,1,1);
+		this.specular = new THREE.Color(1,1,1);
 		this.scale = new THREE.Vector3(1,1,1);
 		this.position = new THREE.Vector3()
 		this.old_position = new THREE.Vector3()
@@ -35,6 +38,27 @@ class Entity
 	preDraw()
 	{
 		if (this.data.geometry === undefined)return;
+		this.data.geometry.userData = this;
+		if (this.highlit == 1)
+		{
+			this.colordirty = 1;
+		}
+		if (this.colordirty == 1)
+		{	
+			if (this.data.material !== undefined)
+			{
+				this.colordirty = 0;
+				this.data.material.color.copy(this.color);
+				if (this.highlit == 1)
+				{
+					this.data.material.color.offsetHSL(0,0.2,0.2);
+					this.highlit = 0;
+					this.colordirty = 1;
+				}
+				this.data.material.reflectivity = this.reflectivity;
+				this.data.material.update();
+			}
+		}
 		if (this.dirty == 1)
 		{
 			this.dirty = 0;
@@ -43,10 +67,6 @@ class Entity
 			this.data.geometry.rotateY(this.rotvector.y);
 			this.data.geometry.rotateZ(this.rotvector.z);
 			this.data.geometry.scale.copy(this.scale);
-			if (this.data.material !== undefined)
-			{
-				this.data.material.color.copy(this.color);
-			}
 			this.data.geometry.updateMatrix();
 		}
 	}
@@ -56,7 +76,21 @@ class Entity
 		this.color.r = r;
 		this.color.g = g;
 		this.color.b = b;
-		this.dirty = 1;
+		this.colordirty = 1;
+	}
+
+	setReflectivity(r)
+	{
+		this.reflectivity = r;
+		this.colordirty = 1;
+	}
+
+	setSpecular(r,g,b)
+	{
+		this.specular.r = r;
+		this.specular.g = g;
+		this.specular.b = b;
+		this.colordirty = 1;
 	}
 
 	setPosition(x,y,z)

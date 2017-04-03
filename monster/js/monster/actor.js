@@ -15,12 +15,11 @@ function actor_new(scene,model)
 	var mesh,mixer;
 	mixer = new THREE.AnimationMixer( scene );
 	loader.load( model, function ( geometry, materials ) {
-			// adjust color a bit
 			var material = materials[ 0 ];
 			material.morphTargets = true;
 			material.color.setHex( 0xffffff );
 			var faceMaterial = new THREE.MultiMaterial( materials );
-			// leave space for big monster
+			geometry.normalize ();
 			mesh = new THREE.Mesh( geometry, faceMaterial );
 			mesh.scale.set(1,1,1);
 			mesh.position.set(0,0,0);
