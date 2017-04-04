@@ -1,7 +1,18 @@
 <?php require_once("header.php");?>
 <body>
+<link href="monster.css" rel="stylesheet">
 
-<div id="game">
+<div class="container"style="position:absolute;width:100%;">
+<div class="row" id="game" style="margin: 0;padding:0;left:0;right:0;">
+<div class="col-md-4" style="position:absolute;top:75px;">
+	<h2 id = "title" style = "top:10px;text-align: center;color:#ffffff"></h2>
+	<p id = "description" style = "color:#eeeeee"></p>
+</div>
+<div style="position:absolute;left:0;right:0;">
+	<H1 style="text-align: center;color:#ffffff">Choose an Essence</H1>
+</div>
+</div>
+</div>
 <?php require_once("js/monster/scene.php");?>
 
 <script src="js/monster/starfield.js"></script>
@@ -12,7 +23,8 @@ var game = new GameSystem();
 var scene = game.getScene();
 // do all setup here
 game.addEntity("starfield",starfield_new(scene),starfield_update,starfield_draw);
-
+var title = document.getElementById("title");
+var description = document.getElementById("description");
 var crystal = game.addEntity(
 		"material crystal",
 		actor_new(scene,'models/crystal/crystal.json'),
@@ -102,6 +114,17 @@ game.setRaycastCallback(function(intersects)
 				if (intersects[i].object.userData == undefined)continue;
 				var ent = intersects[i].object.userData;
 				ent.highlit = 1;
+				var t = "";
+				var d = "";
+				switch(ent.name)
+				{
+					case "abyssal crystal":
+						t = "Abyssal Crystal";
+						d = "The essence of the abyss.  This essence is home to deception, evasion, and infiltration.  Corruption is the core of the abyssal essence..."
+					break;
+				}
+				title.innerHTML = t;
+				description.innerHTML = d;
 				break;
 			}
 		});

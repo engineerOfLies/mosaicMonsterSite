@@ -4,6 +4,7 @@
 <script src="js/loaders/collada/AnimationHandler.js"></script>
 <script src="js/loaders/collada/KeyFrameAnimation.js"></script>
 <script src="./js/GPUParticleSystem.js" charset="utf-8"></script>
+<script src="js/libs/dat.gui.min.js"></script>
 
 <script src="js/monster/entity.js"></script>
 
@@ -15,11 +16,12 @@ class GameSystem
 	{
 		if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 		this.entityList = new EntityList();
-		this.WIDTH = window.innerWidth;
-		this.HEIGHT = window.innerHeight;
 		this.scene = new THREE.Scene();
 		this.raycaster = new THREE.Raycaster();
-		this.mouse = new THREE.Vector2()
+		this.mouse = new THREE.Vector2();
+		this.container = document.getElementById( 'game' );
+		this.WIDTH = this.container.offsetWidth;
+		this.HEIGHT = window.innerHeight;
 	}
 
 	begin()
@@ -43,8 +45,7 @@ class GameSystem
 		this.renderer = new THREE.WebGLRenderer();
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( this.WIDTH, this.HEIGHT );
-		var container = document.getElementById( 'game' );
-		container.appendChild( this.renderer.domElement );
+		this.container.insertBefore(this.renderer.domElement,this.container.childNodes[0]);
 		// lights
 		this.scene.add( new THREE.AmbientLight( 0xcccccc ) );
 		var pointLight = new THREE.PointLight( 0x4444cc, 2, 30 );
