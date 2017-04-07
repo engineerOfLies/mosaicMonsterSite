@@ -1,10 +1,11 @@
 drop table if exists playerData;
 create table playerData(
 	id int not null primary key,
+	monsterId int,
 	screenname varchar(32),
-	starttime int,
-	playtime int,
-	experience int,
+	starttime bigint,
+	playtime bigint,
+	experience bigint,
 	level int,
 	material float(7,4),
 	ethereal float(7,4),

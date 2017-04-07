@@ -48,14 +48,29 @@ class AuthDB
 		return hash("sha256",$this->salt.$password);
 	}
 
-	public function register($username,$password,$email)
+	public function register($username,$password,$email,$display)
 	{
-		return $this->registerUser($username,$password,"p",$email);
+		file_put_contents("/tmp/monster.log","processing\n",FILE_APPEND);
+		$response = $this->registerUser($username,$password,"p",$email);
+		file_put_contents("/tmp/monster.log","got herre\n",FILE_APPEND);
+		if ($response['status'] != "success")return $response;
+		$pid = $response['playerId'];
+		$now = time();
+		$dn = $this->db->real_escape_string($display);
+		$query = "insert into playerData (id,monsterId,screenname,starttime,experience,level,material,ethereal,spiritual,abyssal)VALUES($pid,-1,'$dn',$now,0,1,0,0,0,0);";
+		file_put_contents("/tmp/monster.log",$query,FILE_APPEND);
+		$this->db->query($query);
+		if ($this->db->errno != 0)
+		{
+			err("Failed to add new user profile: ".$this->db->error);
+			return array("status"=>"failed to add new profile");
+		}
+		return $response;
 	}
 
 	public function registerUser($username,$password,$role,$email)
 	{
-		$un = $this->db->real_escape_string($username);
+		$un = $this->db->real_escape_string(strtolower($username));
 		$pw = $this->db->real_escape_string($this->saltPassword($password));
 		$r = trim(strtolower($role));
 		$em = $this->db->real_escape_string($email);
@@ -81,11 +96,11 @@ class AuthDB
 		{
 			return array(
 					"status"=>"fail",
-					"message"=>"username or password already in use");
+					"message"=>"username or email already in use");
 		}
 		$insert = "insert into auth (username,password,role,email) values ('$un','$pw','$ur','$em');";
 		$result = $this->db->query($insert);
-		if ($this->db->affected_rows != 1)
+		if ($this->db->errno != 0)
 		{
 			echo "error: failed to insert row with query:".PHP_EOL;
 			echo $insert.PHP_EOL;
@@ -94,7 +109,8 @@ class AuthDB
 					"message"=>"failed to insert row");	
 		}
 		return array(
-			"status"=>"success");
+			"status"=>"success",
+			"playerId"=>$this->db->insert_id);
 	}
 	
 	public function validateUser($username, $password)
@@ -131,7 +147,7 @@ class AuthDB
 		//new session ID for this user
 		$query = "insert into sessions (sessionString,userId,timestamp,invalid) values ('$sessionId',".$result['userId'].",".time().",0);";
 		$this->db->query($query);
-		if ($this->db->affected_rows != 1)
+		if ($this->db->errno != 0)
 		{
 			echo "error: failed to insert row with query:".PHP_EOL;
 			echo $query.PHP_EOL;
@@ -145,6 +161,19 @@ class AuthDB
 			"role"=>$result["role"],
 			"sessionId"=>$sessionId
 		);
+	}
+
+	public function getUserIdBySession($sessionId)
+	{
+		$si = $this->db->real_escape_string($sessionId);
+		$query = "select userId from sessions where sessionString = '$si';";
+		$results = $this->db->query($query);
+		if ($results->num_rows != 1)
+		{
+			return NULL;
+		}
+		$row = $results->fetch_assoc();
+		return $row["userId"];
 	}
 
 	public function validateSession($username,$sessionId)
@@ -167,7 +196,7 @@ class AuthDB
 			}
 			$update = "update sessions set timestamp = ".time()." where sessionString = '$si'";
 			$result = $this->db->query($update);
-			if ($this->db->affected_rows != 1)
+			if ($this->db->errno != 0)
 			{
 				echo "error: failed to insert session row with query:".PHP_EOL;
 				echo $query.PHP_EOL;

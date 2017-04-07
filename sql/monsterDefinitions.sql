@@ -5,7 +5,10 @@ create table monsterDef (
 	index(sname),
 	lname varchar(32),
 	level int,
-	baseaffinity varchar(4),
+	material int,
+	ethereal int,
+	spiritual int,
+	abyssal int,
 	basetype varchar(32),
 	baseelement varchar(4),
 	reqhealth int,
@@ -19,6 +22,8 @@ create table monsterDef (
 	basehealth int,
 	basestamina int,
 	basemana int,
+	basespeed float(7,4),
+	basefatigue int,
 	basestrength int,
 	basedexterity int,
 	basefocus int,
@@ -31,5 +36,8 @@ create table monsterDef (
 	reqlosses int,
 	special varchar(16),
 	skills varchar(512),
-	requirements varchar(255)
+	requirements varchar(255),
+	model varchar(255),
+	color varchar(8),
+	effects varchar(512)
 );
