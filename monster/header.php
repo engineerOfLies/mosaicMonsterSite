@@ -20,19 +20,19 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a id="monster" class="nav-link disabled" href="monster.php">MONSTER <span class="sr-only">(current)</span></a>
+            <a id="monster" class="nav-link" style="display:none;" href="monster.php">MONSTER <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a id="profile" class="nav-link disabled" href="profile.php">PLAYER <span class="sr-only">(current)</span></a>
+            <a id="profile" class="nav-link" style="display:none;" href="profile.php">PLAYER <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a id="notices" class="nav-link disabled" href="#">NOTICE <span class="sr-only">(current)</span></a>
+            <a id="notices" class="nav-link disabled" style="display:none;" href="#">NOTICE <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a id = "about" class="nav-link" href="#">ABOUT <span class="sr-only">(current)</span></a>
+            <a id = "about" class="nav-link disabled" href="#">ABOUT <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a id="contact" class="nav-link" href="#">CONTACT <span class="sr-only">(current)</span></a>
+            <a id="contact" class="nav-link disabled" href="#">CONTACT <span class="sr-only">(current)</span></a>
           </li>
         </ul>
 		<form class="form-inline mt-2 mt-md-0">

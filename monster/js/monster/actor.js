@@ -9,7 +9,7 @@ function actor_draw(entity)
 {
 }
 
-function actor_new(scene,model)
+function actor_new(scene,model,position)
 {
 	var loader = new THREE.JSONLoader();
 	var mesh,mixer;
@@ -22,7 +22,7 @@ function actor_new(scene,model)
 			geometry.normalize ();
 			mesh = new THREE.Mesh( geometry, faceMaterial );
 			mesh.scale.set(1,1,1);
-			mesh.position.set(0,0,0);
+			mesh.position.copy(position);
 			mesh.rotation.set(0,0,0);
 			mesh.matrixAutoUpdate = false;
 			mesh.updateMatrix();
@@ -40,7 +40,8 @@ function actor_new(scene,model)
 
 	var data = {
 		clock : new THREE.Clock(true),
-		mixer : mixer
+		mixer : mixer,
+		initialPosition : position
 	};
 	return data;
 }

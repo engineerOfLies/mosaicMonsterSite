@@ -1,5 +1,5 @@
 <?php
-
+exit(0);
 require_once("../../../dbaccess/gamedata.inc");
 require_once("../../../dbaccess/auth.inc");
 

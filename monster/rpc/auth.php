@@ -8,10 +8,10 @@ function doLogin($username,$password)
 	return $auth->userLogin($username,$password);
 }
 
-function doRegister($username,$password,$email)
+function doRegister($username,$password,$email,$fname)
 {
 	$auth = new AuthDB();
-	return $auth->register($username,$password,$email);	
+	return $auth->register($username,$password,$email,$fname);	
 }
 
 if (!isset($_POST))
@@ -28,7 +28,7 @@ switch ($request["type"])
 		$response = doLogin($request["username"],$request["password"]);
 	break;
 	case "register":
-		$response = doRegister($request["username"],$request["password"],$request['email']);
+		$response = doRegister($request["username"],$request["password"],$request['email'],$request['fname']);
 	break;
 	case "validate":
 		$response = validateSession($request['session']);

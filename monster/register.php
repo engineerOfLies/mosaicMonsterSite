@@ -8,6 +8,8 @@
         <h2 class="form-signin-heading">Register</h2>
         <label for="inputName" class="sr-only">Username</label>
         <input type="username" id="inputName" class="form-control" placeholder="Username" required autofocus>
+        <label for="inputFullName" class="sr-only">Username</label>
+        <input type="username" id="inputFullName" class="form-control" placeholder="Full Name" required autofocus>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
@@ -30,6 +32,7 @@ function submitRegister()
 {
 
 	var uname = document.getElementById("inputName").value;
+	var fname = document.getElementById("inputFullName").value;
 	var email = document.getElementById("inputEmail").value;
 	var pword = document.getElementById("inputPassword").value;
 	var vpword = document.getElementById("inputPasswordV").value;
@@ -39,7 +42,7 @@ function submitRegister()
 		location.reload();
 		return 0;
 	}
-	sendRegisterRequest(uname,pword,email);
+	sendRegisterRequest(uname,pword,email,fname);
 	return 0;
 }
 
@@ -59,7 +62,7 @@ function HandleRegisterResponse(response)
 	}
 }
 
-function sendRegisterRequest(username,password,email)
+function sendRegisterRequest(username,password,email,fname)
 {
 	var request = new XMLHttpRequest();
 	request.open("POST","rpc/auth.php",true);
@@ -71,7 +74,7 @@ function sendRegisterRequest(username,password,email)
 			HandleRegisterResponse(this.responseText);
 		}
 	}
-	request.send("type=register&username="+username+"&password="+password+"&email="+email);
+	request.send("type=register&username="+username+"&password="+password+"&email="+email+"&fname="+fname);
 }
 
 </script>

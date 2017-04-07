@@ -20,6 +20,16 @@ class Entity
 		this.rotation = new THREE.Vector3();
 		this.old_rotation = new THREE.Vector3();
 		this.rotvector = new THREE.Vector3();
+		if (data.initialPosition != undefined)
+		{
+			this.position.copy(data.initialPosition);
+		}
+	}
+
+	highlight(high)
+	{
+		this.highlit = high;
+		this.colordirty = 1;
 	}
 
 	postUpdate()
@@ -39,10 +49,6 @@ class Entity
 	{
 		if (this.data.geometry === undefined)return;
 		this.data.geometry.userData = this;
-		if (this.highlit == 1)
-		{
-			this.colordirty = 1;
-		}
 		if (this.colordirty == 1)
 		{	
 			if (this.data.material !== undefined)
@@ -52,8 +58,6 @@ class Entity
 				if (this.highlit == 1)
 				{
 					this.data.material.color.offsetHSL(0,0.2,0.2);
-					this.highlit = 0;
-					this.colordirty = 1;
 				}
 				this.data.material.reflectivity = this.reflectivity;
 				this.data.material.update();

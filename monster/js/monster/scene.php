@@ -12,16 +12,26 @@
 
 class GameSystem
 {
-	constructor()
+	constructor(container = "game",fullscreen = true)
 	{
 		if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 		this.entityList = new EntityList();
 		this.scene = new THREE.Scene();
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
-		this.container = document.getElementById( 'game' );
-		this.WIDTH = this.container.offsetWidth;
-		this.HEIGHT = window.innerHeight;
+		this.fullscreen = fullscreen;
+		this.container = document.getElementById( container );
+		if (this.fullscreen)
+		{
+			this.WIDTH = window.innerWidth;
+			this.HEIGHT = window.innerHeight;
+		}
+		else
+		{
+			this.WIDTH = this.container.offsetWidth;
+			this.HEIGHT = this.container.offsetHeight;	
+		}
+		this.clicked = 0;
 	}
 
 	begin()
@@ -62,6 +72,18 @@ class GameSystem
 		//
 		window.addEventListener( 'resize', function(){this.onWindowResize();}.bind(this), false );
 		document.addEventListener( 'mousemove', function(event){this.onDocumentMouseMove(event);}.bind(this), false );
+		document.addEventListener( 'click', function(event){this.onMouseClick(event);}.bind(this), false );
+	}
+
+	onMouseClick( event )
+	{	
+		this.clicked = event.buttons;
+		if (this.rayCastCallback !== undefined)
+		{
+			this.raycaster.setFromCamera( this.mouse, this.camera );
+			var intersects = this.raycaster.intersectObjects( this.scene.children );
+			this.rayCastCallback(intersects);
+		}
 	}
 
 	onDocumentMouseMove( event )
@@ -74,9 +96,21 @@ class GameSystem
 
 	onWindowResize()
 	{
-		this.camera.aspect = window.innerWidth / window.innerHeight;
+		if (this.fullscreen)
+		{
+			this.WIDTH = window.innerWidth;
+			this.HEIGHT = window.innerHeight;
+		}
+		else
+		{
+			this.WIDTH = this.container.offsetWidth;
+			this.HEIGHT = this.container.offsetHeight;	
+		}
+		this.WIDTH = this.container.offsetWidth;
+		this.HEIGHT = this.container.offsetWidth;
+		this.camera.aspect = this.WIDTH / this.HEIGHT;
 		this.camera.updateProjectionMatrix();
-		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.renderer.setSize( this.WIDTH, this.HEIGHT );
 	}
 	animate()
 	{
@@ -88,13 +122,7 @@ class GameSystem
 	render()
 	{
 		this.entityList.drawAll();
-
-		if (this.rayCastCallback !== undefined)
-		{
-			this.raycaster.setFromCamera( this.mouse, this.camera );
-			var intersects = this.raycaster.intersectObjects( this.scene.children );
-			this.rayCastCallback(intersects);
-		}
+		this.clicked = 0;
 
 		this.renderer.render( this.scene, this.camera );
 	}

@@ -16,7 +16,7 @@
           <div class="container">
             <div class="carousel-caption d-none d-md-block text-left">
               <h1>Sign up for free and choose your starting form.</h1>
-              <p>Train and it watch your monster mutate into stranger, more powerful forms</p>
+              <p>Train it and watch as your monster mutates into stranger, more powerful forms</p>
               <p><a class="btn btn-lg btn-primary" href="login.php" role="button">Sign up today</a></p>
             </div>
           </div>
@@ -60,7 +60,5 @@
     <!-- Placed at the end of the document so the pages load faster -->
 
 <?php include('footer.php'); ?>
-<script>
-</script>
 </html>
 
