@@ -52,10 +52,12 @@ class GameSystem
 
 
 		//
-		this.renderer = new THREE.WebGLRenderer();
+		this.renderer = new THREE.WebGLRenderer({ alpha: true });
+//		this.renderer = new THREE.CanvasRenderer( { alpha: true });
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( this.WIDTH, this.HEIGHT );
 		this.container.insertBefore(this.renderer.domElement,this.container.childNodes[0]);
+
 		// lights
 		this.scene.add( new THREE.AmbientLight( 0xcccccc ) );
 		var pointLight = new THREE.PointLight( 0x4444cc, 2, 30 );
@@ -90,7 +92,7 @@ class GameSystem
 	{
 		event.preventDefault();
 		var rect = this.renderer.domElement.getBoundingClientRect();
-		this.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
+		this.mouse.x = ( ( event.clientX - rect.left ) / ( rect.right - rect.left ) ) * 2 - 1;
 		this.mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
 	}
 

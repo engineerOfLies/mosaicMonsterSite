@@ -42,6 +42,7 @@
 <script>
 var game = new GameSystem("game",false);
 var scene = game.getScene();
+playerPartnerCheck();
 getMonsterStats(updateMonsterStats);
 
 game.begin();

@@ -50,7 +50,7 @@ function HandleLoginResponse(response)
 		sessionStorage.setItem("sessionId",data.sessionId);
 		sessionStorage.setItem("username",data.username);
 		sessionStorage.setItem("role",data.role);
-		location.href = "profile.php";
+		location.href = "care.php";
 	}
 }
 

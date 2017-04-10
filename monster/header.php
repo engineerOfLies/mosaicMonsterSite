@@ -20,10 +20,10 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a id="monster" class="nav-link" style="display:none;" href="monster.php">MONSTER <span class="sr-only">(current)</span></a>
+            <a id="monster" class="nav-link" style="display:none;" href="care.php">MONSTER <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a id="profile" class="nav-link" style="display:none;" href="profile.php">PLAYER <span class="sr-only">(current)</span></a>
+            <a id="profile" class="nav-link disabled" style="display:none;" href="#">PLAYER <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a id="notices" class="nav-link disabled" style="display:none;" href="#">NOTICE <span class="sr-only">(current)</span></a>

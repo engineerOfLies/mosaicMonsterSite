@@ -14,12 +14,20 @@ function file_dump($dump)
 	file_put_contents("/tmp/monsterput",print_r($dump, true));
 }
 
+function getPlayerMonsterModel($request)
+{
+	validateSession($request['session']);
+	$session = json_decode($request['session']);
+	$pdb = new PlayerDB();
+	return $pdb->getPlayerMonsterModel($session->id);
+}
+
 function getMonsterStats($request)
 {
 	validateSession($request['session']);
 	$session = json_decode($request['session']);
 	$pdb = new PlayerDB();
-	return $pdb->getMonsterStats($session->id);
+	return $pdb->getPlayerMonsterData($session->id);
 }
 
 function makeMonsterSelection($request)
@@ -27,7 +35,15 @@ function makeMonsterSelection($request)
 	validateSession($request['session']);
 	$session = json_decode($request['session']);
 	$pdb = new PlayerDB();
-	return $pdb->giveStartingMonster($session->d,$request['monsterName']);
+	return $pdb->giveStartingMonster($session->id,$request['monsterName']);
+}
+
+function playerPartnerCheck($request)
+{
+	validateSession($request['session']);
+	$session = json_decode($request['session']);
+	$pdb = new PlayerDB();
+	return $pdb->playerPartnerCheck($session->id);
 }
 
 $request = $_POST;
@@ -39,6 +55,12 @@ switch ($request["type"])
 	break;
 	case "makeMonsterSelection":
 		$response = makeMonsterSelection($request);
+	break;
+	case "getPlayerMonsterModel":
+		$response = getPlayerMonsterModel($request);
+	break;
+	case "playerPartnerCheck":
+		$response = playerPartnerCheck($request);
 	break;
 }
 echo json_encode($response);

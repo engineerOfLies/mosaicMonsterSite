@@ -9,7 +9,7 @@ function actor_draw(entity)
 {
 }
 
-function actor_new(scene,model,position)
+function actor_new(scene,model,position=undefined)
 {
 	var loader = new THREE.JSONLoader();
 	var mesh,mixer;
@@ -19,10 +19,17 @@ function actor_new(scene,model,position)
 			material.morphTargets = true;
 			material.color.setHex( 0xffffff );
 			var faceMaterial = new THREE.MultiMaterial( materials );
-			geometry.normalize ();
+//			geometry.normalize ();
 			mesh = new THREE.Mesh( geometry, faceMaterial );
 			mesh.scale.set(1,1,1);
-			mesh.position.copy(position);
+			if (position === undefined)
+			{
+				mesh.position.set(0,0,0);
+			}
+			else
+			{
+				mesh.position.copy(position);
+			}
 			mesh.rotation.set(0,0,0);
 			mesh.matrixAutoUpdate = false;
 			mesh.updateMatrix();

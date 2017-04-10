@@ -75,6 +75,34 @@ class Entity
 		}
 	}
 
+	setEffects(effectList)
+	{
+		var effects = effectList.split("|");
+		for (var i = 0;i < effects.length;i++)
+		{
+			this.setEffect(effects[i]);
+		}
+	}
+
+	setEffect(effect)
+	{
+		switch(effect)
+		{
+			case "EF_ROTATE":
+				this.setRotVector(0,0.015,0);	
+			break;
+			case "EF_RADIANT":
+				
+			break;
+		}
+	}
+
+	setColorHex(hex)
+	{
+		this.color.setHex(hex);
+		this.colordirty = 1;
+	}
+
 	setColor(r,g,b)
 	{
 		this.color.r = r;

@@ -1,4 +1,8 @@
 <script>
+function error(message)
+{
+	location.href = "error.php?msg="+message;
+}
 /*
 	Monster Stats
 */
@@ -8,7 +12,7 @@ function handleMonsterSelectionResponse(response)
 	var data = JSON.parse(response);
 	if (data === "ok")
 	{
-		location.href = "monster.php";
+		location.href = "care.php";
 	}
 }
 function makeMonsterSelection(monsterName)
@@ -33,12 +37,95 @@ function makeMonsterSelection(monsterName)
 		request.send("type=makeMonsterSelection&session="+sesString+"&monsterName="+monsterName);
 	}
 }
+/*
+get monster model properties
+*/
+
+function handlePlayerPartnerCheckResponse(response,callback)
+{
+	var data = JSON.parse(response);
+	if (data.status === "ok")
+	{
+		if (callback !== undefined)
+		{
+			callback();
+		}
+		return;
+	}
+	location.href = "chooseStarter.php";
+}
+function playerPartnerCheck(callback)
+{
+	if (sessionStorage.sessionId !== undefined)
+	{
+		var request = new XMLHttpRequest();
+		var session = {
+			id : sessionStorage.sessionId,
+			name : sessionStorage.username
+		};
+		var sesString = JSON.stringify(session);
+		request.open("POST","rpc/monsterData.php",true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.onreadystatechange = function ()
+		{
+			if ((this.readyState == 4)&&(this.status == 200))
+			{
+				handlePlayerPartnerCheckResponse(this.responseText,callback);
+			}
+		}
+		request.send("type=playerPartnerCheck&session="+sesString);
+	}
+}
+
+function handlePlayerMonsterModelResponse(response,callback)
+{
+	var data = JSON.parse(response);
+	if ((data !== undefined)&&(data.status === "fail"))
+	{
+		location.href = "chooseStarter.php";
+	}
+	sessionStorage.monstermodel = data.model;
+	sessionStorage.monstercolor = data.color;
+	sessionStorage.monstereffects = data.effects;
+	if (callback != undefined)
+	{
+		callback();
+	}
+}
+function getPlayerMonsterModel(callback)
+{
+	if (sessionStorage.sessionId !== undefined)
+	{
+		var request = new XMLHttpRequest();
+		var session = {
+			id : sessionStorage.sessionId,
+			name : sessionStorage.username
+		};
+		var sesString = JSON.stringify(session);
+		request.open("POST","rpc/monsterData.php",true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.onreadystatechange = function ()
+		{
+			if ((this.readyState == 4)&&(this.status == 200))
+			{
+				handlePlayerMonsterModelResponse(this.responseText,callback);
+			}
+		}
+		request.send("type=getPlayerMonsterModel&session="+sesString);
+	}
+}
+
+/*
+	getting monster stats
+*/
+
+
 function handleMonsterStatsResponse(response,callback)
 {
 	var data = JSON.parse(response);
 	if (data.status === "fail")
 	{
-		location.href = "essenceSelect.php";
+		location.href = "chooseStarter.php";
 	}
 	sessionStorage.monster = response;
 	if (callback != undefined)

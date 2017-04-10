@@ -15,9 +15,7 @@
 <script>
 function signoff()
 {
-sessionStorage.removeItem("sessionId");
-sessionStorage.removeItem("username");
-sessionStorage.removeItem("role");
+sessionStorage.clear();
 location.href = "login.php";
 }
 </script>
