@@ -1,5 +1,5 @@
 id,sname,lname,level,material,ethereal,spiritual,abyssal,,basetype,baseelement,reqhealth,reqstamina,reqmana,reqspeed,reqstrength,reqdexterity,reqfocus,reqresolve,basehealth,basestamina,basemana,basespeed,basefatigue,basestrength,basedexterity,basefocus,baseresolve,reqmaterial,reqether,reqspirit,reqabyss,reqwins,reqlosses,special,skills,requirements,model,color,effects
-0,material,Material Crystal,0,4,0,0,0,none,none,0,0,0,0,0,0,0,0,20,20,10,10,100,8,4,4,4,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,#33ff33,none
-0,ethereal,Ethereal Crystal,0,0,4,0,0,none,none,0,0,0,0,0,0,0,0,10,20,20,10,100,4,4,8,4,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,#3333ff,none
-0,spiritual,Spiritual Crystal,0,0,0,4,0,none,none,0,0,0,0,0,0,0,0,10,20,20,10,100,4,4,4,8,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,#ff3333,none
-0,abyssal,Abyssal Crystal,0,0,0,0,4,none,none,0,0,0,0,0,0,0,0,25,25,10,11,90,4,8,4,4,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,#060006,none
+0,material,Material Crystal,0,4,0,0,0,none,none,0,0,0,0,0,0,0,0,20,20,10,10,100,8,4,4,4,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,0x33ff33,EF_ROTATE|EF_RADIANT
+0,ethereal,Ethereal Crystal,0,0,4,0,0,none,none,0,0,0,0,0,0,0,0,10,20,20,10,100,4,4,8,4,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,0x3333ff,EF_ROTATE|EF_RADIANT
+0,spiritual,Spiritual Crystal,0,0,0,4,0,none,none,0,0,0,0,0,0,0,0,10,20,20,10,100,4,4,4,8,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,0xff3333,EF_ROTATE|EF_RADIANT
+0,abyssal,Abyssal Crystal,0,0,0,0,4,none,none,0,0,0,0,0,0,0,0,25,25,10,11,90,4,8,4,4,0,0,0,0,0,0,none,none,none,models/crystal/crystal.json,0x060006,EF_ROTATE|EF_RADIANT
